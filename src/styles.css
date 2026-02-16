@@ -1,0 +1,375 @@
+@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/jetbrains-mono";
+
+:root {
+  font-family: "Manrope Variable", "Segoe UI", sans-serif;
+  background: #0f0f0f;
+  color: #ececec;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #0f0f0f;
+  padding: 0;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: 1px solid #2a2a2a;
+  background: #151515;
+}
+
+.window-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  display: block;
+  background: #111;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100%;
+  height: 100%;
+  border: 1px solid #2a2a2a;
+}
+
+.sidebar {
+  border-right: 1px solid #252525;
+  padding: 10px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+  min-height: 0;
+}
+
+.sidebar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  text-transform: lowercase;
+  color: #aaaaaa;
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: auto;
+  min-height: 0;
+  margin: 0 -10px;
+}
+
+.project-main {
+  position: relative;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #232323;
+  background: transparent;
+  padding: 9px 32px 9px 12px;
+  cursor: pointer;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+}
+
+.project-main.active {
+  background: #1d1d1d;
+}
+
+.project-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-edit {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-main:hover .project-edit,
+.project-main.active .project-edit,
+.project-main:focus-within .project-edit {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.main {
+  display: grid;
+  grid-template-rows: 50px minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #121212;
+  border-bottom: 1px solid #252525;
+  padding: 0 8px;
+  gap: 8px;
+  user-select: none;
+  min-height: 50px;
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.titlebar-drag {
+  flex: 1 1 auto;
+  min-width: 120px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: move;
+}
+
+.titlebar-title {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: #a8a8a8;
+  text-transform: lowercase;
+}
+
+.titlebar-controls {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.titlebar-btn {
+  width: 26px;
+  height: 22px;
+  padding: 0;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+.titlebar-btn:hover {
+  border-color: #5a5a5a;
+  background: #1f1f1f;
+}
+
+.titlebar-btn:focus-visible {
+  outline: 1px solid #767676;
+  outline-offset: 1px;
+}
+
+.titlebar-btn.close:hover {
+  background: #a43a3a;
+  border-color: #a43a3a;
+}
+
+.tabs-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: auto;
+  min-width: 0;
+  flex: 1;
+  padding: 9px 0;
+}
+
+.window-tab {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  min-width: 160px;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  background: #141414;
+}
+
+.window-tab.active {
+  border-color: #555;
+  background: #1d1d1d;
+}
+
+.window-main {
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 7px 9px;
+  cursor: pointer;
+}
+
+.window-main > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 280px;
+}
+
+.tab-icon {
+  color: #8f8f8f;
+  flex: 0 0 auto;
+}
+
+.icon-btn {
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: #9f9f9f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  color: #f2f2f2;
+  border-color: #5a5a5a;
+}
+
+.icon-btn.close {
+  border: 0;
+  border-left: 1px solid #2a2a2a;
+  border-radius: 0 8px 8px 0;
+  background: transparent;
+}
+
+.add-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.tab-add-btn {
+  align-self: center;
+}
+
+.inline-input {
+  width: 100%;
+  border: 1px solid #606060;
+  border-radius: 6px;
+  background: #0f0f0f;
+  padding: 5px 7px;
+  outline: none;
+}
+
+.tab-input {
+  max-width: 160px;
+}
+
+.project-form {
+  margin: 2px 10px 0;
+}
+
+.terminal-area {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.work-area {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ctx-menu {
+  min-width: 180px;
+  border: 1px solid #343434;
+  border-radius: 8px;
+  background: #151515;
+  padding: 4px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+}
+
+.ctx-item {
+  border-radius: 6px;
+  padding: 7px 9px;
+  font-size: 13px;
+  color: #e4e4e4;
+  outline: none;
+  cursor: pointer;
+}
+
+.ctx-item[data-highlighted] {
+  background: #242424;
+}
+
+.ctx-item.danger {
+  color: #f3a8a8;
+}
+
+.ctx-sep {
+  height: 1px;
+  background: #2c2c2c;
+  margin: 4px 2px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 220px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    border-right: 0;
+    border-bottom: 1px solid #252525;
+  }
+
+  .titlebar-drag {
+    min-width: 56px;
+  }
+
+  .work-area {
+    grid-template-columns: 1fr;
+  }
+}
