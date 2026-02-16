@@ -201,7 +201,7 @@ watch(
 <style scoped>
 .terminal-pane {
   position: absolute;
-  inset: 4px;
+  inset: 2px;
   overflow: hidden;
 }
 

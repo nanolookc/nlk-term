@@ -7,7 +7,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "reka-ui";
-import { Minus, PanelRightClose, PanelRightOpen, Pencil, Plus, Square, TerminalSquare, X } from "lucide-vue-next";
+import { ChevronsLeft, ChevronsRight, Minus, PanelRightClose, PanelRightOpen, Pencil, Plus, Square, TerminalSquare, X } from "lucide-vue-next";
 import GitPanel from "./components/GitPanel.vue";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { invoke } from "@tauri-apps/api/core";
@@ -49,6 +49,7 @@ const editingTabName = ref("");
 const newProjectInput = ref<HTMLInputElement | null>(null);
 const runtimeSessions = ref<Record<string, RuntimeSession>>({});
 const gitPanelOpen = ref(true);
+const sidebarCollapsed = ref(false);
 const activeTerminalCwd = ref<string | null>(null);
 let cwdPollTimer: number | null = null;
 
@@ -411,16 +412,35 @@ watch(
 
 <template>
   <div class="window-frame">
-    <div class="layout">
+    <div class="layout" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
       <aside class="sidebar">
         <div class="sidebar-head">
-          <span>projects</span>
-          <button class="add-btn" @click="startCreateProject">
-            <Plus :size="14" />
+          <span v-if="!sidebarCollapsed">projects</span>
+          <div class="sidebar-head-actions">
+            <button v-if="!sidebarCollapsed" class="add-btn" @click="startCreateProject">
+              <Plus :size="14" />
+            </button>
+            <button class="add-btn" @click="sidebarCollapsed = !sidebarCollapsed">
+              <ChevronsRight v-if="sidebarCollapsed" :size="14" />
+              <ChevronsLeft v-else :size="14" />
+            </button>
+          </div>
+        </div>
+
+        <div v-if="sidebarCollapsed" class="project-list project-list-collapsed">
+          <button
+            v-for="project in state.projects"
+            :key="project.id"
+            class="project-avatar"
+            :class="{ active: project.id === state.activeProjectId }"
+            :title="project.name"
+            @click="setActiveProject(project.id)"
+          >
+            {{ project.name.slice(0, 2).toUpperCase() }}
           </button>
         </div>
 
-        <div class="project-list">
+        <div v-else class="project-list">
           <ContextMenuRoot v-for="project in state.projects" :key="project.id">
             <ContextMenuTrigger as-child>
               <div class="project-main" :class="{ active: project.id === state.activeProjectId }" @click="setActiveProject(project.id)">
@@ -511,11 +531,11 @@ watch(
             </div>
           </div>
 
-          <div class="titlebar-drag" data-tauri-drag-region>
-            <div class="titlebar-title">nlk-term</div>
-          </div>
+          <div class="titlebar-drag" data-tauri-drag-region />
 
-          <div class="titlebar-controls">
+          <div class="titlebar-right">
+            <div class="titlebar-title">nlk-term</div>
+            <div class="titlebar-controls">
             <button
               class="titlebar-btn"
               type="button"
@@ -535,6 +555,7 @@ watch(
             <button class="titlebar-btn close" type="button" title="Close window" aria-label="Close window" @click="closeWindow">
               <X :size="13" />
             </button>
+            </div>
           </div>
         </header>
 
