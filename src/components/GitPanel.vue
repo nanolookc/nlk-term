@@ -95,7 +95,12 @@ const filteredBranches = computed(() => {
 
 function renderEmpty(message: string) {
   if (!diffContainer.value) return;
-  diffContainer.value.textContent = message;
+  diffContainer.value.textContent = "";
+  if (!message) return;
+  const el = document.createElement("div");
+  el.className = "diff-empty";
+  el.textContent = message;
+  diffContainer.value.appendChild(el);
 }
 
 function renderDiffFromPatch(patch: string) {
@@ -1097,9 +1102,27 @@ watch(
 }
 
 .empty {
-  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px;
   font-size: 12px;
   color: var(--text-2);
+  text-align: center;
+  margin: 0;
+}
+
+.diff-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 120px;
+  padding: 24px 16px;
+  font-size: 12px;
+  color: var(--text-2);
+  text-align: center;
+  letter-spacing: 0.02em;
 }
 
 /* Diff */
